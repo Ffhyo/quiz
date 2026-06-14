@@ -42,9 +42,9 @@ export default function App() {
 
       
          </div>}
-      <div className="text-white w-full h-32 text-4xl flex items-center" onClick={()=> setOpen(false)}>
+      <div className="text-white w-full  h-32  text-sm md:text-lg lg:text-4xl flex  flex-col md:flex-row items-center " onClick={()=> setOpen(false)}>
         
-        <div className="w-2/4 flex  flex-col justify-end px-4 font-bold  h-full items-center px-24  text-yellow-300">
+        <div className="w-full md:w-2/4 flex   flex-col justify-end px-4 font-bold  h-full items-center md:px-24  text-yellow-300 ">
          QUIZ COMPETITION-2083
          <p className="text-lg text-white">
           science and mathematics
@@ -52,21 +52,22 @@ export default function App() {
         </div>
 
         <div className="w-2/4  h-full flex items-center justify-center relative">
-          <img
+       
+          <div className=" bg-white text-blue-600 md:h-1/2 h-[38px] absolute right-0 z-0  flex items-center ">
+             <img
             src={logo}
             alt="School Logo"
-            className="h-28 w-28 object-cover z-2 -translate-x-32"
+            className="md:h-28 md:w-28 h-14 w-14 object-cover z-2 md:-translate-x-12 -translate-x-8"
             style={{
               clipPath: "circle(40% at 50% 53%)",
             }}
           />
-          <div className="bg-white text-blue-600 h-1/2 absolute right-0 z-0 px-8 ">
-            <p>
+            <p className="-translate-x-8 text-[12px] md:text-2xl lg:text-4xl w-64 md:w-full ">
               SUNFLOWER ACADEMY 
               <div className="w-full h-1 bg-blue-700">
 
               </div>
-              <p  className="text-sm font-bold text-center ">
+              <p  className="md:font-bold font-normal text-center text-[12px] md:text-[14px] lg:text-[16px]  ">
                 TARKESHWORE-06, KATHMANDU
               </p>
 
