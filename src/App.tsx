@@ -51,7 +51,7 @@ export default function App() {
          </p>
         </div>
 
-        <div className="w-2/4  h-full flex items-center justify-center relative border ">
+        <div className="md:w-2/4 w-full h-full flex items-center justify-center relative border ">
        
           <div className=" bg-white text-blue-600 md:h-1/2 h-[38px] absolute right-0 z-0  flex items-center ">
              <img
