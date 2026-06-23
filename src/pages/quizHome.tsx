@@ -32,7 +32,7 @@ export default function QuizHome() {
 
                 <div className="bg-[#1F3662] mt-2 px-2 py-2 font-semibold text-white rounded mx-2 cursor-pointer"
                  onClick={ ()=> setDisplay(item)}
-                
+                key={item}  
                 >
                   {item}
 
@@ -71,7 +71,7 @@ export default function QuizHome() {
               clipPath: "circle(40% at 50% 53%)",
             }}
           />
-            <p className="-translate-x-8 text-[12px] md:text-2xl lg:text-4xl w-64 md:w-full ">
+            <div className="-translate-x-8 text-[12px] md:text-2xl lg:text-4xl w-64 md:w-full ">
               SUNFLOWER ACADEMY 
               <div className="w-full h-1 bg-blue-700">
 
@@ -81,7 +81,7 @@ export default function QuizHome() {
               </p>
 
               
-            </p>
+            </div>
 
           </div>
         </div>

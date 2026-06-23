@@ -31,7 +31,7 @@ export function Auth( ){
       // { token: "jwt-token-here" }
 
       localStorage.setItem("token",data.data.token)
-      console.log(data.data.token)
+     
 
       console.log("Login successful");
      navigate("/quiz")
@@ -46,7 +46,7 @@ export function Auth( ){
     <div className="w-full flex justify-center items-center h-screen ">
        <div className=" bg-white text-blue-600 md:h-16 h-[38px] absolute top-12 left-0  flex items-center  z-20">
           
-            <p className="translate-x-8 text-[12px] md:text-2xl lg:text-2xl w-64 md:w-full ">
+            <div className="translate-x-8 text-[12px] md:text-2xl lg:text-2xl w-64 md:w-full ">
               SUNFLOWER ACADEMY 
               <div className="w-full h-1 bg-blue-700">
 
@@ -56,7 +56,7 @@ export function Auth( ){
               </p>
 
               
-            </p>
+            </div>
                <img
             src={logo}
             alt="School Logo"
