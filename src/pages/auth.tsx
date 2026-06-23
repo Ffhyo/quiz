@@ -51,9 +51,9 @@ export function Auth( ){
               <div className="w-full h-1 bg-blue-700">
 
               </div>
-              <p  className="md:font-bold font-normal text-center text-[12px] md:text-[14px] lg:text-[16px]  ">
+              <div  className="md:font-bold font-normal text-center text-[12px] md:text-[14px] lg:text-[16px]  ">
                 TARKESHWORE-06, KATHMANDU
-              </p>
+              </div>
 
               
             </div>
@@ -70,7 +70,7 @@ export function Auth( ){
 
 
       <div
-  className="relative w-full h-screen bg-cover bg-center"
+  className="relative w-0 h-screen bg-cover bg-center md:w-1/2 lg:w-full "
   style={{ backgroundImage: `url(${heroImg})` }}
 >
   {/* Overlay */}
@@ -86,7 +86,7 @@ export function Auth( ){
     </div>
   </div>
 </div>
-      <div className=" w-128 h-screen flex justify-center items-center gap-4 bg-white">
+      <div className="md:w-128 h-screen flex justify-center items-center gap-4 bg-white w-full">
          <form className="w-2/3 p-4" onSubmit={handleLogin}>
           <h1 className="text-2xl font-bold text-blue-800 mb-4 text-center ">LOG IN </h1>
 
