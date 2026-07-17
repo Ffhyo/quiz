@@ -1,13 +1,14 @@
 import { useQuiz } from "../context/quizContext";
-
+import { useState } from "react";
 export default function Options() {
+const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
   const {
     questions,
     selectedSubject,
     setSelectedSubject,
     selectedRound,
     setSelectedRound,
-    currentQuestion,
+   
     setCurrentQuestion,
     getRoundsBySubject,
     getFilteredQuestions,
@@ -28,6 +29,15 @@ export default function Options() {
     : [];
 
   const filteredQuestions = getFilteredQuestions();
+const handleQuestionSelect = (
+  index: number,
+  id: string
+) => {
+  if (usedQuestions.includes(id)) return;
+
+  setCurrentQuestion(index);
+  setUsedQuestions((prev) => [...prev, id]);
+};
 
   return (
     <>
@@ -88,23 +98,30 @@ export default function Options() {
             Question Number
           </label>
 
-          <div className="flex flex-wrap gap-2">
-            {filteredQuestions.map((_, index) => (
-              <button
-                key={index}
-                onClick={() =>
-                  setCurrentQuestion(index)
-                }
-                className={`w-12 h-12 rounded font-semibold ${
-                  currentQuestion === index
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
+             <div className="flex flex-wrap gap-2">
+                    {selectedSubject && selectedRound ? (
+                     filteredQuestions.map((question, index) => (
+  <button
+    key={question.id}
+    disabled={usedQuestions.includes(question.id)}
+    onClick={() =>
+      handleQuestionSelect(index, question.id)
+    }
+    className={`w-12 h-12 rounded font-semibold transition ${
+      usedQuestions.includes(question.id)
+        ? "bg-gray-500 text-white cursor-not-allowed"
+        : "bg-white text-black hover:bg-blue-100"
+    }`}
+  >
+    {index + 1}
+  </button>
+))
+                    ) : (
+                      <p className="text-gray-300">
+                        Select subject and round first.
+                      </p>
+                    )}
+                  </div>
         </div>
       </div>
 

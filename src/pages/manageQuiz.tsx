@@ -14,10 +14,12 @@ export default function ManageQuiz() {
   const [editingQuestion, setEditingQuestion] = useState<any>(null);
 
   const handleEdit = (question: any) => {
+     
     setEditingQuestion({ ...question });
   };
 
   const handleDelete = (id: string ) => {
+    console.log(id)
     const confirmed = window.confirm(
       "Are you sure you want to delete this question?"
     );
@@ -86,7 +88,7 @@ export default function ManageQuiz() {
                 }
                 className="px-3 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
               >
-                Delete
+                Delete 
               </button>
             </div>
           </div>
@@ -226,14 +228,14 @@ export default function ManageQuiz() {
               <button
                 onClick={() => {
                   updateQuestion(
-                    editingQuestion.id,
+                    editingQuestion._id,
                     editingQuestion
                   );
                   setEditingQuestion(null);
                 }}
                 className="px-4 py-2 bg-green-600 text-white rounded"
               >
-                Save
+                Save   
               </button>
             </div>
 

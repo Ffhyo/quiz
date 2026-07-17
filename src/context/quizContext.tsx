@@ -5,6 +5,10 @@ import {
   useEffect,
 
 } from "react";
+import { createQuestions } from "../api/createQuestions";
+import {getQuestions} from "../api/getQuestions";
+import { updateQuestions } from "../api/updateQuestion";
+import { deleteQuestions } from "../api/deleteQuestion";
 
 import type { ReactNode } from "react";
 export type Question = {
@@ -50,12 +54,12 @@ getRoundsBySubject: (
     React.SetStateAction<Question[]>
   >;
 
-  addQuestion: (question: Question) => void;
+  addQuestion: (question: Question) => Promise <void>;
 
   updateQuestion: (
     id: string,
     updatedQuestion: Question
-  ) => void;
+  ) =>Promise< void>;
 
   deleteQuestion: (id: string) => void;
 
@@ -129,6 +133,10 @@ type QuizProviderProps = {
 export function QuizProvider({
   children,
 }: QuizProviderProps) {
+  useEffect(() => {
+
+    loadQuestions();
+  }, []);
   // SUBJECTS
   const [subjects, setSubjects] =
     useState<string[]>(() => {
@@ -168,23 +176,16 @@ export function QuizProvider({
     });
 
   // QUESTIONS
-  const [questions, setQuestions] =
-    useState<Question[]>(() => {
-      if (
-        typeof window !== "undefined"
-      ) {
-        const saved =
-          localStorage.getItem(
-            "questions"
-          );
-
-        return saved
-          ? JSON.parse(saved)
-          : [];
-      }
-
-      return [];
-    });
+  const [questions, setQuestions] =useState<Question[]>([]);
+  const loadQuestions = async () => {
+    try {
+      const fetchedQuestions = await getQuestions();
+ 
+      setQuestions(fetchedQuestions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  }
 
   // FILTERS
   const [selectedSubject,
@@ -198,7 +199,7 @@ export function QuizProvider({
   // QUIZ STATE
   const [currentQuestion,
     setCurrentQuestion] =
-    useState(0);
+    useState(-1);
 
   const [score, setScore] =
     useState(0);
@@ -215,8 +216,8 @@ export function QuizProvider({
     useState(false);
 
 
-const [showOptions, setShowOptions] = useState(true);
-const [showImage, setShowImage] = useState(true);
+const [showOptions, setShowOptions] = useState(false);
+const [showImage, setShowImage] = useState(false);
   // SAVE TO LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem(
@@ -301,34 +302,50 @@ const [showImage, setShowImage] = useState(true);
   };
 
   // QUESTION FUNCTIONS
-  const addQuestion = (
+  const addQuestion = async(
     question: Question
   ) => {
+    try{
+    const savedQuestion = await createQuestions(question);
     setQuestions((prev) => [
       ...prev,
-      question,
+      savedQuestion,
     ]);
 
     addSubject(question.subject);
-    addRound(question.round);
+    addRound(question.round); 
+  }
+  catch(error){
+    console.error("Error creating question:", error);
   };
+}
 
-  const updateQuestion = (
-    id: string,
-    updatedQuestion: Question
-  ) => {
+ const updateQuestion = async (
+  id: string,
+  updatedQuestion: Question
+): Promise<void> => {
+  try {
+    
+    await updateQuestions(
+      id,
+      updatedQuestion
+    );
+
     setQuestions((prev) =>
       prev.map((q) =>
-        q.id === id
-          ? updatedQuestion
-          : q
+        q.id === id ? updatedQuestion : q
       )
     );
-  };
+  } catch (error) {
+    console.error("Error updating question:", error);
+  }
+};
 
   const deleteQuestion = (
     id: string
   ) => {
+    deleteQuestions(id)
+
     setQuestions((prev) =>
       prev.filter(
         (q) => q.id !== id

@@ -7,23 +7,77 @@ import { RxCross2 } from "react-icons/rx";
 import SetQuiz from "./setQuiz";
 import ManageQuiz from "./manageQuiz";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP)
+import { useRef } from "react";
+import Team from "./team";
 export default function QuizHome() {
+
+ 
   const navigate = useNavigate();
     const [isOpen,setOpen] = useState(false)
-  const listItem = ["Quiz", "Set Quiz" , "manage quiz"]
+  const listItem = ["Quiz", "Set Quiz" , "manage quiz","Team"]
   const [display, setDisplay]=useState("")
+  const navItem = useRef<HTMLDivElement>(null);
+const tl = useRef<gsap.core.Timeline | null>(null);
+const handleToggle =()=>{
+  gsap.to(navItem.current,{
+    x:-300,
+    opacity:0,
+    duration:1,
+    onComplete:()=>{
+      setOpen(prev=>!prev)
+    }
+  })
+}
+
+useGSAP(
+  () => {
+    if (!isOpen || !navItem.current) return;
+
+    tl.current=gsap.timeline()
+    
+   tl.current = gsap.timeline();
+
+tl.current.from(navItem.current, {
+  x: -150,
+  duration: 0.4,
+  ease: "power3.out",
+});
+
+tl.current.from(
+  navItem.current.children,
+  {
+    x: -100,
+    opacity: 0,
+    stagger: 0.1,
+  },
+  "-=0.2"
+);
+    
+
+    
+  }
+  
+  
+  ,
+  { dependencies: [isOpen] }
+);
+
   return (
      <div className="bg-[#1F3662] w-full min-h-screen relative">
 
       
 
-         <FiMenu className="absolute top-12  left-12 text-white "  size={24} onClick={()=> setOpen(!isOpen)}/>
+         <FiMenu className="absolute top-12  left-12 text-white "  size={24} onClick={()=> setOpen(!isOpen)
+    }/>
         { 
           
           
-          isOpen && <div className="absolute bg-slate-200 top-0 bottom-0 w-48 pt-16 z-100">
+          isOpen && <div className="absolute bg-slate-200 top-0 bottom-0 w-48 pt-16 z-100" ref={navItem}>
               
-              <RxCross2   className={`absolute top-8 right-6 cursor-pointer`} size={24} onClick={() =>setOpen(!isOpen)}/>
+              <RxCross2   className={`absolute top-8 right-6 cursor-pointer`} size={24} onClick={handleToggle}/>
 
 
              {
@@ -138,6 +192,10 @@ export default function QuizHome() {
   display ==="manage quiz" &&  <div className=" relative z-50"> <ManageQuiz />  </div>
 }
 
+
+{
+  display ==="Team" &&  <div className=" relative z-50"> <Team setDisplay={setDisplay} />  </div>
+}
 
 
     

@@ -53,14 +53,16 @@ export default function SetQuiz() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !formData.subject ||
       !formData.round ||
       !formData.question
     ) {
       alert("Fill all required fields");
+      
       return;
+
     }
 
     addQuestion({
@@ -89,11 +91,15 @@ export default function SetQuiz() {
           | "D",
 
       marks: Number(formData.marks),
+
     });
+     
+       
+
 
     setFormData({
-      subject: "",
-      round: "",
+      subject: formData.subject,
+      round: formData.round,
       question: "",
       optionA: "",
       optionB: "",
