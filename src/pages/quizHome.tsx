@@ -64,7 +64,11 @@ tl.current.from(
   ,
   { dependencies: [isOpen] }
 );
+const handleLogout = () => {
+  localStorage.clear(); // Remove everything
 
+  navigate("/", { replace: true });
+};
   return (
      <div className="bg-[#1F3662] w-full min-h-screen relative">
 
@@ -98,7 +102,7 @@ tl.current.from(
 
              }
              <div className="bg-[#1F3662] mt-2 px-2 py-2 font-semibold text-white rounded mx-2 cursor-pointer"
-                  onClick={() => navigate("/")} >
+                  onClick={handleLogout} >
                 
                   Logout
                     </div>
