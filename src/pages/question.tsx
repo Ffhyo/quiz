@@ -47,33 +47,14 @@ useEffect(() => {
   const filteredQuestions = getFilteredQuestions();
 
   
-   useGSAP(()=>{
- 
-     tl.current = gsap.timeline()
-    const split = new  SplitText(readyQuiz.current,{
-      type:'chars'
-    })
-      gsap.from(split.chars, {
-    y: 100,
-    opacity: 0,
-    stagger: 0.05,
-    duration: 0.8,
-    ease: "power4.out",
+  useGSAP(() => {
+  if (currentQuestion === -1 || !questRef.current) return;
+
+  const split = new SplitText(questRef.current, {
+    type: "chars",
   });
-    const split1 = new  SplitText(headRef.current,{
-      type:'chars'
-    })
-      gsap.from(split1.chars, {
-    y: 100,
-    opacity: 0,
-    stagger: 0.05,
-    duration: 0.8,
-    ease: "power4.out",
-  });
-      const split2 = new  SplitText(questRef.current,{
-      type:'chars'
-    })
-      gsap.from(split2.chars, {
+
+  gsap.from(split.chars, {
     y: 100,
     opacity: 0,
     stagger: 0.05,
@@ -81,29 +62,50 @@ useEffect(() => {
     ease: "power4.out",
   });
 
- if (!showOptions || !optionRef.current) return;
+  return () => split.revert();
+}, { dependencies: [currentQuestion] });
 
- requestAnimationFrame(() => {
-    gsap.fromTo(
-      optionRef.current!.children,
-      {
-        opacity: 0,
-        x: -80,
-        scale: 0.8,
-      },
-      {
-        opacity: 1,
-        x: 0,
-        scale: 1,
-        stagger: 0.08,
-        duration: 0.6,
-      }
-    );
+useGSAP(() => {
+  if (!readyQuiz.current || !headRef.current) return;
+
+  const split1 = new SplitText(headRef.current, { type: "chars" });
+  const split2 = new SplitText(readyQuiz.current, { type: "chars" });
+
+  gsap.from([...split1.chars, ...split2.chars], {
+    y: 100,
+    opacity: 0,
+    stagger: 0.03,
+    duration: 0.8,
   });
 
- 
-  },{dependencies:[currentQuestion,readyQuiz.current,headRef.current,showOptions]})
+  return () => {
+    split1.revert();
+    split2.revert();
+  };
+}, []);
 
+useGSAP(() => {
+  if (!showOptions || !optionRef.current) return;
+
+  gsap.fromTo(
+    optionRef.current.children,
+    {
+      opacity: 0,
+      y: 50,
+      scale: 0.8,
+    },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: "back.out(1.7)",
+    }
+  );
+}, {
+  dependencies: [showOptions],
+});
 
   if (currentQuestion === -1) {
     return (
@@ -157,7 +159,7 @@ useEffect(() => {
               Question {currentQuestion + 1} 
             </h2>
 
-            <p className="text-blue-100 gap-4">
+            <p className="text-blue-100 ">
               {selectedSubject} • Round {selectedRound}
             </p>
           </div>
