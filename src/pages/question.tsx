@@ -20,7 +20,7 @@ export default function Question() {
   const readyQuiz = useRef(null)
   const headRef =useRef(null)
   const questRef = useRef(null)
-  const tl = useRef<gsap.core.Timeline | null>(null);
+  
   const optionRef =useRef<HTMLDivElement>(null)
   const [time, setTime] =useState(30)
 useEffect(() => {
