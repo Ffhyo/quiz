@@ -228,7 +228,7 @@ export default function ManageQuiz() {
               <button
                 onClick={() => {
                   updateQuestion(
-                    editingQuestion._id,
+                    editingQuestion.id,
                     editingQuestion
                   );
                   setEditingQuestion(null);
