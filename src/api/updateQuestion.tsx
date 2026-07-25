@@ -3,7 +3,7 @@ import type { Question } from "../context/quizContext";
 export const updateQuestions= async (id: string, updatedData: Question) => {
   try {
     
-    const response = await fetch(`https://quizbackend-yo87.onrender.com/api/questions/${id}`, {
+    const response = await fetch(`https://quizbackend-axg7.onrender.com/api/questions/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

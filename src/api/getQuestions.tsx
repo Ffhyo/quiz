@@ -1,6 +1,6 @@
 export const getQuestions = async () => {
   const res = await fetch(
-    "https://quizbackend-yo87.onrender.com/api/questions"
+    "https://quizbackend-axg7.onrender.com/api/questions"
   );
 
   if (!res.ok) {

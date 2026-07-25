@@ -1,6 +1,8 @@
 export const speak = async (text: string) => {
   try {
-    const res = await fetch("https://quizbackend-yo87.onrender.com/api/voice/speak", {
+
+
+    const res = await fetch("https://quizbackend-axg7.onrender.com/api/voice/speak", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
