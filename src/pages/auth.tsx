@@ -12,7 +12,7 @@ export function Auth( ){
   e.preventDefault();
 
   try {
-    const response = await fetch("https://quizbackend-yo87.onrender.com/api/auth/login", {
+    const response = await fetch("https://quizbackend-axg7.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -26,7 +26,7 @@ for (const [key, value] of formData.entries()) {
   console.log(key, value);
 }
   const res = await fetch(
-    "https://quizbackend-axg7.onrender.com/api/questions",
+    "http://localhost:5000/api/questions",
     {
       method: "POST",
       body: formData, // DON'T use JSON.stringify()
