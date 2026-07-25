@@ -18,6 +18,7 @@ const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
     setShowOptions,
     showImage,
     setShowImage,
+    generateRapidRound
   } = useQuiz();
 
   const subjects = [
@@ -98,30 +99,46 @@ const handleQuestionSelect = (
             Question Number
           </label>
 
-             <div className="flex flex-wrap gap-2">
-                    {selectedSubject && selectedRound ? (
-                     filteredQuestions.map((question, index) => (
-  <button
-    key={question.id}
-    disabled={usedQuestions.includes(question.id)}
-    onClick={() =>
-      handleQuestionSelect(index, question.id)
-    }
-    className={`w-12 h-12 rounded font-semibold transition ${
-      usedQuestions.includes(question.id)
-        ? "bg-gray-500 text-white cursor-not-allowed"
-        : "bg-white text-black hover:bg-blue-100"
-    }`}
-  >
-    {index + 1}
-  </button>
-))
-                    ) : (
-                      <p className="text-gray-300">
-                        Select subject and round first.
-                      </p>
-                    )}
-                  </div>
+  <div className="flex flex-wrap gap-2">
+  {selectedSubject && selectedRound ? (
+    selectedRound === "warm-up" ? (
+      <button
+        onClick={() => setCurrentQuestion(0)}
+        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+      >
+        🔥 Start Warm Up
+      </button>
+    ) : selectedRound === "rapid" ? (
+      <button
+        onClick={() => {
+          generateRapidRound();
+        }}
+        className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+      >
+        ⚡ Start Rapid Fire
+      </button>
+    ) : (
+      filteredQuestions.map((question, index) => (
+        <button
+          key={question.id}
+          disabled={usedQuestions.includes(question.id)}
+          onClick={() => handleQuestionSelect(index, question.id)}
+          className={`w-12 h-12 rounded font-semibold transition ${
+            usedQuestions.includes(question.id)
+              ? "bg-gray-500 text-white cursor-not-allowed"
+              : "bg-white text-black hover:bg-blue-100"
+          }`}
+        >
+          {index + 1}
+        </button>
+      ))
+    )
+  ) : (
+    <p className="text-gray-300">
+      Select subject and round first.
+    </p>
+  )}
+</div>
         </div>
       </div>
 

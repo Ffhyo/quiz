@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuiz } from "../context/quizContext";
 
 export default function SetQuiz() {
-  const {
-    addQuestion,
-    subjects,
-    rounds,
-  } = useQuiz();
+  const { addQuestion, subjects, rounds } = useQuiz();
+  
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -23,80 +22,68 @@ export default function SetQuiz() {
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement |
-      HTMLTextAreaElement |
-      HTMLSelectElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
-  const handleImage = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
     if (!file) return;
 
-    const reader = new FileReader();
+    // Revoke old object URL if it exists to avoid memory leaks
+    if (formData.image) {
+      URL.revokeObjectURL(formData.image);
+    }
 
-    reader.onloadend = () => {
-      setFormData((prev) => ({
-        ...prev,
-        image: reader.result as string,
-      }));
-    };
-
-    reader.readAsDataURL(file);
+    setImageFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      image: URL.createObjectURL(file),
+    }));
   };
 
   const handleSubmit = async () => {
-    if (
-      !formData.subject ||
-      !formData.round ||
-      !formData.question
-    ) {
+    if (!formData.subject || !formData.round || !formData.question) {
       alert("Fill all required fields");
-      
       return;
-
     }
 
-    addQuestion({
-      id: crypto.randomUUID(),
-
-      subject: formData.subject,
-
-      round: formData.round,
-
-      question: formData.question,
-
-      image: formData.image,
-
-      options: {
-        A: formData.optionA,
-        B: formData.optionB,
-        C: formData.optionC,
-        D: formData.optionD,
+    await addQuestion(
+      {
+        id: crypto.randomUUID(),
+        subject: formData.subject,
+        round: formData.round,
+        question: formData.question,
+        image: "",
+        options: {
+          A: formData.optionA,
+          B: formData.optionB,
+          C: formData.optionC,
+          D: formData.optionD,
+        },
+        answer: formData.answer as "A" | "B" | "C" | "D",
+        marks: Number(formData.marks),
       },
+      imageFile || undefined
+    );
 
-      answer:
-        formData.answer as
-          | "A"
-          | "B"
-          | "C"
-          | "D",
+    // Clean up created object URL from memory
+    if (formData.image) {
+      URL.revokeObjectURL(formData.image);
+    }
 
-      marks: Number(formData.marks),
+    // Reset file state & file input field
+    setImageFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
 
-    });
-     
-       
-
-
+    // Reset form data
     setFormData({
       subject: formData.subject,
       round: formData.round,
@@ -116,13 +103,11 @@ export default function SetQuiz() {
   return (
     <div className="w-full flex justify-center py-8">
       <div className="w-full max-w-4xl bg-white p-6 rounded-xl shadow-lg">
-
         <h1 className="text-3xl font-bold text-center mb-6">
           Create Quiz Question
         </h1>
 
         <div className="space-y-4">
-
           {/* Subject */}
           <input
             type="text"
@@ -136,10 +121,7 @@ export default function SetQuiz() {
 
           <datalist id="subjects">
             {subjects.map((subject) => (
-              <option
-                key={subject}
-                value={subject}
-              />
+              <option key={subject} value={subject} />
             ))}
           </datalist>
 
@@ -156,10 +138,7 @@ export default function SetQuiz() {
 
           <datalist id="rounds">
             {rounds.map((round) => (
-              <option
-                key={round}
-                value={round}
-              />
+              <option key={round} value={round} />
             ))}
           </datalist>
 
@@ -175,6 +154,7 @@ export default function SetQuiz() {
 
           {/* Image */}
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleImage}
@@ -185,7 +165,7 @@ export default function SetQuiz() {
             <img
               src={formData.image}
               alt="preview"
-              className="h-40 rounded"
+              className="h-40 rounded object-cover"
             />
           )}
 
@@ -251,11 +231,10 @@ export default function SetQuiz() {
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-blue-700 text-white py-3 rounded-lg"
+            className="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800 transition-colors"
           >
             Add Question
           </button>
-
         </div>
       </div>
     </div>

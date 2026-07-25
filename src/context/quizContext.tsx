@@ -42,7 +42,29 @@ type QuizContextType = {
   deleteRound: (round: string) => void;
 
   // Rounds
- 
+ // Rapid Fire
+    rapidTeams: {
+      A: Question[];
+      B: Question[];
+      C: Question[];
+      D: Question[];
+    };
+
+currentTeam: "A" | "B" | "C" | "D";
+setCurrentTeam: React.Dispatch<
+  React.SetStateAction<"A" | "B" | "C" | "D">
+>;
+
+currentRapidQuestion: number;
+setCurrentRapidQuestion: React.Dispatch<
+  React.SetStateAction<number>
+>;
+
+generateRapidRound: () => void;
+
+nextRapidQuestion: () => void;
+
+nextTeam: () => void;
 
 getRoundsBySubject: (
   subject: string
@@ -54,7 +76,10 @@ getRoundsBySubject: (
     React.SetStateAction<Question[]>
   >;
 
-  addQuestion: (question: Question) => Promise <void>;
+addQuestion: (
+  question: Question,
+  imageFile?: File
+) => Promise<void>;
 
   updateQuestion: (
     id: string,
@@ -119,6 +144,7 @@ getRoundsBySubject: (
 
   nextQuestion: () => void;
   resetQuiz: () => void;
+  
 };
 
 const QuizContext =
@@ -218,6 +244,19 @@ export function QuizProvider({
 
 const [showOptions, setShowOptions] = useState(false);
 const [showImage, setShowImage] = useState(false);
+// Rapid Fire
+const [rapidTeams, setRapidTeams] = useState({
+  A: [] as Question[],
+  B: [] as Question[],
+  C: [] as Question[],
+  D: [] as Question[],
+});
+
+const [currentTeam, setCurrentTeam] =
+  useState<"A" | "B" | "C" | "D">("A");
+
+const [currentRapidQuestion, setCurrentRapidQuestion] =
+  useState(0);
   // SAVE TO LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem(
@@ -239,6 +278,68 @@ const [showImage, setShowImage] = useState(false);
       JSON.stringify(questions)
     );
   }, [questions]);
+
+//Rapid 
+const shuffle = <T,>(array: T[]): T[] => {
+  const arr = [...array];
+
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(
+      Math.random() * (i + 1)
+    );
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+};
+const generateRapidRound = () => {
+  const rapidQuestions = questions.filter(
+    q =>
+      q.subject === selectedSubject &&
+      q.round === "rapid"
+  );
+
+  console.log("hi")
+   console.log("Rapid Questions:", rapidQuestions);
+  console.log("Count:", rapidQuestions.length);
+  if (rapidQuestions.length < 40) {
+    alert("Rapid Fire requires at least 40 questions.");
+    return;
+  }
+
+  const shuffled = shuffle(rapidQuestions);
+
+  setRapidTeams({
+    A: shuffled.slice(0, 10),
+    B: shuffled.slice(10, 20),
+    C: shuffled.slice(20, 30),
+    D: shuffled.slice(30, 40),
+  });
+
+  setCurrentTeam("A");
+  setCurrentRapidQuestion(0);
+};
+const nextRapidQuestion = () => {
+  setCurrentRapidQuestion(prev =>
+    prev < 9 ? prev + 1 : prev
+  );
+};
+
+const teams = ["A","B","C","D"] as const;
+
+const nextTeam = () => {
+  const index = teams.indexOf(currentTeam);
+
+  if (index < teams.length - 1) {
+    setCurrentTeam(teams[index + 1]);
+    setCurrentRapidQuestion(0);
+  }
+};
+
+
+
+
 
   // SUBJECT FUNCTIONS
   const addSubject = (
@@ -302,23 +403,27 @@ const [showImage, setShowImage] = useState(false);
   };
 
   // QUESTION FUNCTIONS
-  const addQuestion = async(
-    question: Question
-  ) => {
-    try{
-    const savedQuestion = await createQuestions(question);
+const addQuestion = async (
+  question: Question,
+  imageFile?: File
+) => {
+  try {
+    const savedQuestion = await createQuestions(
+      question,
+      imageFile
+    );
+
     setQuestions((prev) => [
       ...prev,
       savedQuestion,
     ]);
 
     addSubject(question.subject);
-    addRound(question.round); 
+    addRound(question.round);
+  } catch (err) {
+    console.error(err);
   }
-  catch(error){
-    console.error("Error creating question:", error);
-  };
-}
+};
 
  const updateQuestion = async (
   id: string,
@@ -481,6 +586,19 @@ const [showImage, setShowImage] = useState(false);
         setShowOptions,
         showImage,
         setShowImage,
+        rapidTeams,
+
+        currentTeam,
+        setCurrentTeam,
+
+        currentRapidQuestion,
+        setCurrentRapidQuestion,
+
+        generateRapidRound,
+
+        nextRapidQuestion,
+
+        nextTeam,
         
       }}
     >

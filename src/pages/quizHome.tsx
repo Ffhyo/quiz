@@ -12,6 +12,8 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP)
 import { useRef } from "react";
 import Team from "./team";
+import { useQuiz } from "../context/quizContext";
+import RapidRound from "../round/rapidRound";
 export default function QuizHome() {
 
  
@@ -19,6 +21,7 @@ export default function QuizHome() {
     const [isOpen,setOpen] = useState(false)
   const listItem = ["Quiz", "Set Quiz" , "manage quiz","Team"]
   const [display, setDisplay]=useState("")
+  const {selectedRound} =useQuiz()
   const navItem = useRef<HTMLDivElement>(null);
 const tl = useRef<gsap.core.Timeline | null>(null);
 const handleToggle =()=>{
@@ -176,7 +179,10 @@ const handleLogout = () => {
   display === "Quiz" &&
    <div className="w-full flex flex-col md:flex-row z-10" onClick={()=> setOpen(false)}>
   <div className="w-full md:w-2/3">
-    <Question />
+  {
+    selectedRound === "rapid" ? <RapidRound />: <Question />
+  }
+   
   </div>
 
   <div className="w-full md:w-1/3">
