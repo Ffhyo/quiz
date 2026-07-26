@@ -17,6 +17,7 @@ export type Question = {
   round: string;
   question: string;
   image?: string;
+  category?: string; // NEW
 
   options: {
     A: string;
@@ -144,6 +145,15 @@ addQuestion: (
 
   nextQuestion: () => void;
   resetQuiz: () => void;
+
+  selectedCategory: string;
+setSelectedCategory: React.Dispatch<
+  React.SetStateAction<string>
+>;
+
+getCategories: () => (string | undefined)[];
+  
+  
   
 };
 
@@ -221,6 +231,9 @@ export function QuizProvider({
   const [selectedRound,
     setSelectedRound] =
     useState("");
+
+    //select category
+    const [selectedCategory, setSelectedCategory] = useState("");
 
   // QUIZ STATE
   const [currentQuestion,
@@ -300,9 +313,6 @@ const generateRapidRound = () => {
       q.round === "rapid"
   );
 
-  console.log("hi")
-   console.log("Rapid Questions:", rapidQuestions);
-  console.log("Count:", rapidQuestions.length);
   if (rapidQuestions.length < 40) {
     alert("Rapid Fire requires at least 40 questions.");
     return;
@@ -482,19 +492,33 @@ const addQuestion = async (
       (q) => q.round === round
     );
   };
+const getFilteredQuestions = () => {
+  return questions.filter(q =>
+    (!selectedSubject || q.subject === selectedSubject) &&
+    (!selectedRound || q.round === selectedRound) &&
+    (
+      selectedRound !== "curriculum" ||
+      !selectedCategory ||
+      q.category === selectedCategory
+    )
+  );
+};
 
-  const getFilteredQuestions =
-    () => {
-      return questions.filter(
-        (q) =>
-          (!selectedSubject ||
-            q.subject ===
-              selectedSubject) &&
-          (!selectedRound ||
-            q.round ===
-              selectedRound)
-      );
-    };
+
+const getCategories = () => {
+  return [
+    ...new Set(
+      questions
+        .filter(
+          q =>
+            q.subject === selectedSubject &&
+            q.round === "curriculum" &&
+            q.category
+        )
+        .map(q => q.category!)
+    ),
+  ];
+};
 
   // QUIZ FUNCTIONS
   const nextQuestion = () => {
@@ -533,6 +557,8 @@ const addQuestion = async (
     ),
   ];
 };
+
+
 
   return (
     <QuizContext.Provider
@@ -599,6 +625,10 @@ const addQuestion = async (
         nextRapidQuestion,
 
         nextTeam,
+        selectedCategory,
+        setSelectedCategory,
+        getCategories,
+        
         
       }}
     >

@@ -5,10 +5,11 @@ export const createQuestions = async (
   imageFile?: File
 ) => {
   const formData = new FormData();
-
+ 
   formData.append("subject", question.subject);
   formData.append("round", question.round);
   formData.append("question", question.question);
+  formData.append("category", question.category??"" );
 
   formData.append("A", question.options.A);
   formData.append("B", question.options.B);
@@ -22,11 +23,9 @@ export const createQuestions = async (
   if (imageFile) {
     formData.append("image", imageFile);
   }
-for (const [key, value] of formData.entries()) {
-  console.log(key, value);
-}
+
   const res = await fetch(
-    "http://localhost:5000/api/questions",
+    "https://quizbackend-axg7.onrender.com/api/questions",
     {
       method: "POST",
       body: formData, // DON'T use JSON.stringify()
@@ -35,3 +34,6 @@ for (const [key, value] of formData.entries()) {
 
   return await res.json();
 };
+
+//http://localhost:5000
+//https://quizbackend-axg7.onrender.com

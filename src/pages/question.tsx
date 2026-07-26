@@ -135,6 +135,17 @@ export default function Question() {
           <p className="text-gray-300 text-lg" ref={readyQuiz}>
             Select a subject, round and question number.
           </p>
+          <p className="text-gray-300" ref={readyQuiz} >
+              warm-up ,
+              general,
+                curriculum,
+                  rapid,
+                    buzzer,
+                      audio-visual
+          </p>
+          
+
+          
         </div>
       </div>
     );

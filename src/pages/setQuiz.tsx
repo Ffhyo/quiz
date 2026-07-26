@@ -7,18 +7,20 @@ export default function SetQuiz() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+
   const [formData, setFormData] = useState({
-    subject: "",
-    round: "",
-    question: "",
-    optionA: "",
-    optionB: "",
-    optionC: "",
-    optionD: "",
-    answer: "A",
-    marks: 1,
-    image: "",
-  });
+  subject: "",
+  round: "",
+  category: "",
+  question: "",
+  optionA: "",
+  optionB: "",
+  optionC: "",
+  optionD: "",
+  answer: "A",
+  marks: 1,
+  image: "",
+});
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -48,16 +50,27 @@ export default function SetQuiz() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.subject || !formData.round || !formData.question) {
-      alert("Fill all required fields");
-      return;
-    }
+    if (
+  !formData.subject ||
+  !formData.round ||
+  !formData.question ||
+  (
+    formData.round === "Curriculum" &&
+    !formData.category
+  )
+) {
+  alert("Fill all required fields");
+  return;
+}
 
     await addQuestion(
       {
         id: crypto.randomUUID(),
         subject: formData.subject,
         round: formData.round,
+      category: formData.round === "curriculum"
+        ? formData.category
+        : "",
         question: formData.question,
         image: "",
         options: {
@@ -88,6 +101,7 @@ export default function SetQuiz() {
       subject: formData.subject,
       round: formData.round,
       question: "",
+      category: "",
       optionA: "",
       optionB: "",
       optionC: "",
@@ -135,6 +149,22 @@ export default function SetQuiz() {
             className="w-full border p-3 rounded"
             list="rounds"
           />
+          {formData.round === "curriculum" && (
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="w-full border p-3 rounded"
+        >
+          <option value="">Select Category</option>
+
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Biology">Biology</option>
+          <option value="ICT">ICT</option>
+          <option value="Astronomy">Astronomy</option>
+        </select>
+)}
 
           <datalist id="rounds">
             {rounds.map((round) => (

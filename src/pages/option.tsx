@@ -18,7 +18,11 @@ const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
     setShowOptions,
     showImage,
     setShowImage,
-    generateRapidRound
+    generateRapidRound,
+    selectedCategory,
+    setSelectedCategory,
+    getCategories
+
   } = useQuiz();
 
   const subjects = [
@@ -52,11 +56,13 @@ const handleQuestionSelect = (
 
           <select
             value={selectedSubject}
-            onChange={(e) => {
+             onChange={(e) => {
               setSelectedSubject(e.target.value);
               setSelectedRound("");
+              setSelectedCategory("");
               setCurrentQuestion(-1);
             }}
+
             className="px-4 py-2 rounded-lg border bg-white text-black"
           >
             <option value="">Choose Subject</option>
@@ -77,8 +83,13 @@ const handleQuestionSelect = (
 
           <select
             value={selectedRound}
-            onChange={(e) => {
+           onChange={(e) => {
               setSelectedRound(e.target.value);
+
+              if (e.target.value !== "curriculum") {
+                setSelectedCategory("");
+              }
+
               setCurrentQuestion(-1);
             }}
             className="px-4 py-2 rounded-lg border bg-white text-black"
@@ -93,6 +104,31 @@ const handleQuestionSelect = (
           </select>
         </div>
 
+        {selectedRound === "curriculum" && (
+  <div className="flex flex-col">
+    <label className="text-white font-semibold mb-2">
+      Select Category
+    </label>
+
+    <select
+      value={selectedCategory}
+      onChange={(e) => {
+        setSelectedCategory(e.target.value);
+        setCurrentQuestion(-1);
+      }}
+      className="px-4 py-2 rounded-lg border bg-white text-black"
+    >
+      <option value="">Select Category</option>
+
+      {getCategories().map((category) => (
+        <option key={category} value={category}>
+          {category}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
+
         {/* Question Numbers */}
         <div className="flex flex-col">
           <label className="text-white font-semibold mb-2">
@@ -100,7 +136,9 @@ const handleQuestionSelect = (
           </label>
 
   <div className="flex flex-wrap gap-2">
-  {selectedSubject && selectedRound ? (
+  {selectedSubject && selectedRound 
+  &&  (selectedRound !== "curriculum" || selectedCategory)
+  ? (
     selectedRound === "warm-up" ? (
       <button
         onClick={() => setCurrentQuestion(0)}
@@ -134,9 +172,11 @@ const handleQuestionSelect = (
       ))
     )
   ) : (
-    <p className="text-gray-300">
-      Select subject and round first.
-    </p>
+  <p className="text-gray-300">
+  {selectedRound === "curriculum"
+    ? "Please select a curriculum category."
+    : "Select subject and round first."}
+</p>
   )}
 </div>
         </div>
