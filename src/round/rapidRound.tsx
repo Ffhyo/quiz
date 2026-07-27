@@ -189,7 +189,7 @@ export default function RapidRound() {
       </div>
     );
   }
-
+console.log(question)
   return (
     <div className="w-full flex justify-center items-center p-6 mt-10 relative z-20">
       <div className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl">

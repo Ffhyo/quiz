@@ -55,7 +55,7 @@ export default function SetQuiz() {
   !formData.round ||
   !formData.question ||
   (
-    formData.round === "Curriculum" &&
+    formData.round === "curriculum" &&
     !formData.category
   )
 ) {
