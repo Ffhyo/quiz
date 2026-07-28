@@ -1,10 +1,14 @@
 import { BiChevronRight } from "react-icons/bi";
 import heroImg from "../assets/school.jpg"
-import logo from "/iconschool.jpg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP)
 export function Auth( ){
   const navigate = useNavigate();
+  const formbox = useRef<HTMLFormElement>(null)
 
   const [email , setEmail] =useState('')
   const [password,setPassword] =useState('')
@@ -42,11 +46,21 @@ export function Auth( ){
     console.error("Login failed:", error);
   }
 };
+
+useGSAP(()=>{
+  gsap.from(formbox.current!.querySelectorAll("*"), {
+   x:10,
+   opacity:0,
+   stagger:0.1
+  })
+
+})
   return (
     <div className="w-full flex justify-center items-center h-screen ">
-       <div className=" bg-white text-blue-600 md:h-16 h-[38px] absolute top-12 left-0  flex items-center  z-20">
+       <div className=" bg-white text-blue-600 md:h-16 h-[38px] absolute top-12 left-0 w-96 px-8 flex 
+       rounded items-center  z-20">
           
-            <div className="translate-x-8 text-[12px] md:text-2xl lg:text-2xl w-64 md:w-full ">
+            <div className=" text-[12px] md:text-2xl lg:text-2xl w-68 md:w-full text-center ">
               SUNFLOWER ACADEMY 
               <div className="w-full h-1 bg-blue-700">
 
@@ -57,15 +71,7 @@ export function Auth( ){
 
               
             </div>
-               <img
-            src={logo}
-            alt="School Logo"
-            className="md:h-28 md:w-28 h-14 w-14 object-cover  translate-x-8"
-            style={{
-              clipPath: "circle(40% at 50% 53%)",
-            }}
-          />
-
+        
           </div>
 
 
@@ -86,32 +92,32 @@ export function Auth( ){
     </div>
   </div>
 </div>
-      <div className="md:w-128 h-screen flex justify-center items-center gap-4 bg-white w-full">
-         <form className="w-2/3 p-4" onSubmit={handleLogin}>
+      <div className="md:w-128 h-screen flex justify-center items-center gap-4 bg-white w-full" 
+    >
+         <form className="w-2/3 p-4" onSubmit={handleLogin}   ref={formbox}>
           <h1 className="text-2xl font-bold text-blue-800 mb-4 text-center ">LOG IN </h1>
 
-         <label className="mt-2">
-  <input
-    type="email"
-className="w-full p-2 mb-4 border-b-3 border-gray-300 focus:outline-none focus:border-blue-800 bg-transparent transition-colors"    placeholder="Email"
- onChange={(e)=>setEmail(e.target.value)}
- />
-</label>
+                      <label className="mt-2">
+                <input
+                  type="email"
+              className="w-full p-2 mb-4 border-b-3 border-gray-300 focus:outline-none focus:border-blue-800 bg-transparent transition-colors"    placeholder="Email"
+              onChange={(e)=>setEmail(e.target.value)}
+              />
+              </label>
 
-<label>
-  <input
-    type="password"
-className="w-full p-2 mb-4 border-b-3 border-gray-300 focus:outline-none focus:border-blue-800 bg-transparent transition-colors"    placeholder="Password"
- 
- onChange={(e)=>setPassword(e.target.value)}
- />
-</label>
-<div className="flex  flex-col w-full items-center gap-4">
+                                <label>
+                    <input
+                      type="password"
+                  className="w-full p-2 mb-4 border-b-3 border-gray-300 focus:outline-none focus:border-blue-800 bg-transparent transition-colors"    placeholder="Password"
+                  
+                  onChange={(e)=>setPassword(e.target.value)}
+                  />
+                  </label>
+                  <div className="flex  flex-col w-full items-center gap-4">
 
-<button className="bg-blue-800 text-white  p-2 px-8 rounded-full flex items-center gap-2 hover:scale-105 transition-transform" type="submit">Log In <BiChevronRight className="translate-y-[1px]" size={24} /></button>
-<p className="text-sm text-gray-600 hover:text-blue-800 cursor-pointer">Forget Password?</p>
-
-</div>
+                  <button className="bg-blue-800 text-white  p-2 px-8 rounded-full flex items-center gap-2 hover:scale-105 transition-transform" type="submit">Log In <BiChevronRight className="translate-y-[1px]" size={24} /></button>
+                  <p className="text-sm text-gray-600 hover:text-blue-800 cursor-pointer">Forget Password?</p>
+      </div>
           
 
 

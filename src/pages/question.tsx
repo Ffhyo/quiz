@@ -89,24 +89,25 @@ export default function Question() {
     return () => split.revert();
   }, { dependencies: [currentQuestion] });
 
-  useGSAP(() => {
-    if (!readyQuiz.current || !headRef.current) return;
+useGSAP(() => {
+  if (!questRef.current) return;
 
-    const split1 = new SplitText(headRef.current, { type: "chars" });
-    const split2 = new SplitText(readyQuiz.current, { type: "chars" });
+  const split = new SplitText(questRef.current, {
+    type: "words",
+  });
 
-    gsap.from([...split1.chars, ...split2.chars], {
-      y: 100,
-      opacity: 0,
-      stagger: 0.03,
-      duration: 0.8,
-    });
+  gsap.from(split.words, {
+    opacity: 0,
+    filter: "blur(12px)",
+    y: 15,
+    stagger: 0.08,
+    duration: 0.45,
+    fontSize:0.5,
+    ease: "power3.out",
+  });
 
-    return () => {
-      split1.revert();
-      split2.revert();
-    };
-  }, []);
+  return () => split.revert();
+}, { dependencies: [currentQuestion] });
 
   useGSAP(() => {
     if (!showOptions || !optionRef.current) return;

@@ -46,7 +46,7 @@ const handleQuestionSelect = (
 
   return (
     <>
-      <div className="w-full flex flex-wrap gap-6 justify-center items-center p-4">
+      <div className="w-full flex flex-wrap gap-6 justify-center items-center p-4 relative ">
 
         {/* Subject */}
         <div className="flex flex-col">
