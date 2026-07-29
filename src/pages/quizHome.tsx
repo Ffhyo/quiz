@@ -169,9 +169,9 @@ const handleLogout = () => {
 
       
          </div>}
-      <div className="text-white w-full  h-32  absolute top-0  left-24  translate-x-48  text-sm md:text-lg lg:text-4xl flex  flex-col md:flex-row items-center " onClick={()=> setOpen(false)}>
+      <div className="text-white w-full  h-32  absolute top-0   text-sm md:text-lg lg:text-4xl flex  flex-col md:flex-row items-center " onClick={()=> setOpen(false)}>
         
-        <div className="w-full md:w-2/4 flex   flex-col justify-end px-4 font-bold  h-full items-center md:px-24  text-yellow-300 ">
+        <div className="w-full  flex   flex-col justify-end px-4 font-bold  h-full items-center md:px-24  text-yellow-300 ">
          QUIZ COMPETITION-2083
          <p className="text-lg text-white">
           Science and Mathematics
