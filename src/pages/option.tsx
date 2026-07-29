@@ -135,7 +135,17 @@ const handleQuestionSelect = (
             Question Number
           </label>
 
-  <div className="flex flex-wrap gap-2">
+<div
+  className="
+    flex flex-wrap gap-2
+    max-h-60
+    overflow-y-auto
+    hide-scrollbar
+    p-2
+    rounded-lg
+  "
+>
+ 
   {selectedSubject && selectedRound 
   &&  (selectedRound !== "curriculum" || selectedCategory)
   ? (
@@ -183,7 +193,7 @@ const handleQuestionSelect = (
       </div>
 
       {/* TOGGLES */}
-      <div className="w-full p-4 relative z-10 flex gap-6 pl-12">
+      <div className="w-full p-4 relative z-10 flex gap-6 pl-12 flex-col">
 
         <label className="text-white flex items-center gap-2">
           <input

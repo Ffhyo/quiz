@@ -206,7 +206,7 @@ const handleLogout = () => {
 }
 {
   display === "Quiz" &&
-   <div className="w-full flex flex-col md:flex-row z-10 -translate-y-16" onClick={()=> setOpen(false)}>
+   <div className="w-full flex flex-col md:flex-row relative z-10 -translate-y-16" onClick={()=> setOpen(false)}>
   <div className="w-full md:w-2/3">
   {
     selectedRound === "rapid" ? <RapidRound />: <Question />
@@ -214,7 +214,7 @@ const handleLogout = () => {
    
   </div>
 
-  <div className="w-full md:w-1/3 relative z-50">
+  <div className="w-full md:w-1/3 relative z-50 ">
     <Options />
   </div>
 </div>
